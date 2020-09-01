@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react"
 import _, { set } from "lodash"
 import moment from "moment"
 import { graphql, useStaticQuery } from "gatsby"
-import DropDown from "./dropdown"
-import BarChart from "./page2/barChart"
-import ToggleSwitch from "./page2/toggleSwitch"
+import DropDown from "../dropdown"
+import BarChart from "./barChart"
+import ToggleSwitch from "./toggleSwitch"
 
 const cssGroupChart = {
   marginBottom: "42px",
@@ -311,6 +311,7 @@ export default ({
   isShowAll,
   setCountByGroup,
   senatorType,
+  setBarchartGroupWidth = { setBarchartGroupWidth },
 }) => {
   const senate = useStaticQuery(
     graphql`
@@ -519,13 +520,23 @@ export default ({
     count_by_yourSelf: count_by_yourSelf,
   })
 
-  if (!firstTime) {
-    setFirstTime(true)
-  }
-
   const types = ["id", "1", "2", "3", "4", "5"]
   const is_yAxis = true
+<<<<<<< HEAD:src/components/senateVotelogBarchart.js
   const clientWidth = document.body.clientWidth
+=======
+  const clientWidth = document.getElementsByClassName(
+    "senateVotelogBarchart"
+  )[0]
+  const [width, setWidth] = useState(
+    clientWidth ? clientWidth.clientWidth : window.innerWidth
+  )
+  useEffect(() => {
+    setWidth(width)
+    console.log(width, "<<- setting width")
+  }, [width])
+  //width without scroll bar for window user
+>>>>>>> 9876a17612385b696bdb2128e7f7fc8f457f7523:src/components/senate/senateVotelogBarchart.js
 
   console.log("clientWidth", clientWidth);
   
@@ -546,6 +557,7 @@ export default ({
   const people_in_government = count_people(count_by_government)
   const width_is_margin = width - 360
   let groupWidth = []
+<<<<<<< HEAD:src/components/senateVotelogBarchart.js
   const rect_1 = ((people_in_position * width_is_margin) / all_peoples);
   const rect_2 = ((people_in_yourSelf * width_is_margin) / all_peoples);
   const rect_3 = ((people_in_government * width_is_margin) / all_peoples);
@@ -553,6 +565,19 @@ export default ({
   groupWidth = [ rect_1, rect_2, rect_3]
   
 console.log(rect_1, rect_2,rect_3 );
+=======
+  if (width) {
+    groupWidth = [
+      (people_in_position / all_peoples) * width + padding[0],
+      (people_in_yourSelf / all_peoples) * width + padding[1],
+      (people_in_government / all_peoples) * width - padding[0] - padding[1],
+    ]
+  }
+  if (!firstTime) {
+    setFirstTime(true)
+    setBarchartGroupWidth(groupWidth)
+  }
+>>>>>>> 9876a17612385b696bdb2128e7f7fc8f457f7523:src/components/senate/senateVotelogBarchart.js
 
   const choices = {
     sort_by: {
